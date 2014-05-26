@@ -103,6 +103,7 @@ body {
 }
 img {
   max-width: 600px;
+  max-height: 600px;
   display: block;
 }
 </style>
