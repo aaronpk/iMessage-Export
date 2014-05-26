@@ -28,9 +28,9 @@ function contact($id) {
   }
 
   if(array_key_exists($id, $data)) {
-    return '<a href="' . $href . '">' . $data[$id] . '</a>';
+    return '<a href="' . $href . '" class="p-author h-card">' . $data[$id] . '</a>';
   } else {
-    return '<a href="' . $href . '">' . $id . '</a>';
+    return '<a href="' . $href . '" class="p-author h-card">' . $id . '</a>';
   }
 }
 
@@ -72,8 +72,8 @@ function format_line($line, $attachments) {
 
   return '<div class="h-entry">'
     . '<time class="dt-published" datetime="' . date('c', $line['date']) . '">' . date('Y-m-d H:i:s', $line['date']) . '</time> '
-    . '<span class="p-author h-card">' . contact($contact) . '</span> ' 
-    . '<span class="e-content p-name">' . htmlentities(trim($line['text'])) . '</span>'
+    . contact($contact)
+    . ' <span class="e-content p-name">' . htmlentities(trim($line['text'])) . '</span>'
     . $attachments_html
     . '</div>';
 }
