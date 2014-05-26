@@ -2,13 +2,21 @@
 chdir(dirname(__FILE__));
 include('include.php');
 
+if(file_exists('last.txt')) {
+  $last = file_get_contents('last.txt');
+} else {
+  $last = 0;
+}
+
 $query = $db->query('SELECT message.ROWID, date+978307200 AS date, 
     message.text, is_from_me, handle.id AS contact
   FROM message
   LEFT JOIN handle ON message.handle_id = handle.ROWID
   WHERE cache_roomnames IS NULL
+    AND date+978307200 > ' . $last . '
   ORDER BY date
   ');
+$last_timestamp = 0;
 while($line = $query->fetch(PDO::FETCH_ASSOC)) {
   $fn = filename_for_message($line['contact'], $line['date']);
   if(!file_exists(dirname($fn))) {
@@ -40,5 +48,11 @@ while($line = $query->fetch(PDO::FETCH_ASSOC)) {
       copy(str_replace('~/',$_SERVER['HOME'].'/',$at['filename']), $imgsrc);
     }
   }
+
+  if($line['date'] > $last_timestamp) {
+    $last_timestamp = $line['date'];
+  }
 }
+
+file_put_contents('last.txt', $last_timestamp);
 
