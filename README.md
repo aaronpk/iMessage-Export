@@ -52,7 +52,7 @@ Each message is an [h-entry](http://microformats.org/wiki/h-entry) containing th
   <time class="dt-published" datetime="2014-05-01T10:49:00+00:00">2014-05-01 10:49:00</time> 
   <a href="mailto:aaron@parecki.com" class="p-author h-card">Aaron Parecki</a> 
   <span class="e-content p-name">Message text here</span>
-  </div>
+</div>
 ```
 
 Photos in the message thread are also included in the export and are stored in a subfolder with the same name as the file. They are embedded in the HTML with an img tag so they will be rendered by browsers.
