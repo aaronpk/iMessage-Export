@@ -20,10 +20,17 @@ function load_contacts() {
 
 function contact($id) {
   $data = load_contacts();
-  if(array_key_exists($id, $data)) {
-    return '"' . $data[$id] . '" <' . $id . '>';
+
+  if(preg_match('/.+@.+\..+/', $id)) {
+    $href = 'mailto:' . $id;
   } else {
-    return '<' . $id . '>';
+    $href = 'sms:' . $id;
+  }
+
+  if(array_key_exists($id, $data)) {
+    return '<a href="' . $href . '">' . $data[$id] . '</a>';
+  } else {
+    return '<a href="' . $href . '">' . $id . '</a>';
   }
 }
 
@@ -38,21 +45,67 @@ function contact_name($id) {
 
 function filename_for_message($contact, $ts) {
   $folder = contact_name($contact);
-  return 'messages/' . $folder . '/' . date('Y-m', $ts) . '.txt';
+  return 'messages/' . $folder . '/' . date('Y-m', $ts) . '.html';
 }
 
-function format_line($line) {
+function attachment_folder($contact, $ts, $relative=false) {
+  $folder = contact_name($contact);
+  return ($relative ? '' : 'messages/' . $folder . '/') . date('Y-m', $ts) . '/';
+}
+
+function format_line($line, $attachments) {
   global $me;
+
   if($line['is_from_me'])
     $contact = $me;
   else
     $contact = $line['contact'];
-  return date('Y-m-d H:i:s', $line['date']) . ' ' . contact($contact) . ' ' . trim($line['text']);
+
+  $attachments_html = '';
+
+  if(count($attachments)) {
+    foreach($attachments as $at) {
+      $imgsrc = attachment_folder($line['contact'], $line['date'], true) . $at['transfer_name'];
+      $attachments_html .= '<img src="' . $imgsrc . '" class="u-photo">';
+    }
+  }
+
+  return '<div class="h-entry">'
+    . '<time class="dt-published" datetime="' . date('c', $line['date']) . '">' . date('Y-m-d H:i:s', $line['date']) . '</time> '
+    . '<span class="p-author h-card">' . contact($contact) . '</span> ' 
+    . '<span class="e-content p-name">' . htmlentities(trim($line['text'])) . '</span>'
+    . $attachments_html
+    . '</div>';
 }
 
-function entry_exists($line, $fn) {
+function entry_exists($line, $attachments, $fn) {
   if(!file_exists($fn)) return false;
   $file = file_get_contents($fn);
-  $date = date('Y-m-d H:i:s', $line['date']);
-  return strpos($file, $date.' ') !== false;
+  return strpos($file, format_line($line, $attachments)) !== false;
+}
+
+function html_template() {
+  ob_start();
+?>
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style type="text/css">
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  padding: 10px;
+}
+.h-entry {
+  padding: 8px;
+}
+.h-entry:nth-of-type(2n+1) {
+  background-color: #eee;
+}
+img {
+  max-width: 600px;
+  display: block;
+}
+</style>
+<?php
+  return ob_get_clean();
 }
