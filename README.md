@@ -6,10 +6,14 @@ Archives all your iMessage history from the `chat.db` file.
 Currently group conversations are not supported.
 
 
-Address Book
-------------
+Contacts
+--------
 
-First run `contacts.php` which will write out a file of all the contacts listed in the chat log.
+If you don't already have a contacts.txt file, you'll need to create one. This way the messages will be stored in folders by peoples' names rather than by their phone numbers.
+
+The very first thing in the `contacts.txt` must be your own iMessage ID and name. This is used to set the name for your own sent messages in the logs.
+
+First run `php contacts.php` which will write out a file of all the contacts listed in the chat log.
 Fill in this file with peoples' names so that the chat logs look a little better.
 
 ```
@@ -17,12 +21,15 @@ Fill in this file with peoples' names so that the chat logs look a little better
 cooldude@gmail.com Cool Dude
 ```
 
-Make sure your own iMessage ID is the first thing in the list, since that will be used
-as the identity of any messages you send.
+You can have multiple entries per person, and they will be combined into a single log folder with that person's name.
 
 
 Folder Structure
 ----------------
+
+Messages are saved in separate files per month under a folder of each person's name. If you don't have an entry for them in your `contacts.txt` file, the folder name will be their iMessage ID (phone number or email address).
+
+Photos that were sent in messages will also be archived in the folder.
 
 ```
 messages/
