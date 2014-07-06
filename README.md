@@ -119,7 +119,7 @@ CREATE TABLE `messages` (
   `from_name` varchar(255) DEFAULT NULL,
   `to` varchar(255) DEFAULT NULL,
   `to_name` varchar(255) DEFAULT NULL,
-  `message` text,
+  `message` text CHARACTER SET utf8mb4,
   `num_emoji` int(11) DEFAULT NULL,
   `num_attachments` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -175,5 +175,46 @@ ORDER BY COUNT(1) DESC;
 
 Obviously you should replace my name with yours. This will count both sent and received messages.
 
+
+### Number of messages sent and received per day
+
+```sql
+SELECT date, COUNT(1) AS num
+FROM messages
+GROUP BY date
+```
+
+### Days with the most messages sent in the past year
+
+```sql
+SELECT date, COUNT(1) AS num
+FROM messages
+WHERE date > "2013-07-07"
+  AND date < "2014-07-07"
+GROUP BY date
+ORDER BY COUNT(1) DESC
+```
+
+### Number of messages per month
+
+```sql
+SELECT date, COUNT(1) AS num
+FROM messages
+WHERE date > "2013-07-07"
+  AND date < "2014-07-07"
+GROUP BY YEAR(date), MONTH(date)
+ORDER BY date DESC
+```
+
+### Number of emoji used per month
+
+```sql
+SELECT date, SUM(num_emoji) AS num
+FROM messages
+WHERE date > "2013-07-07"
+  AND date < "2014-07-07"
+GROUP BY YEAR(date), MONTH(date)
+ORDER BY date DESC
+```
 
 

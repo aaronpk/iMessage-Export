@@ -9,8 +9,8 @@ $dbconfig = array(
   'password' => ''
 );
 
-$sql = new PDO('mysql:dbname=' . $dbconfig['name'] . ';host=' . $dbconfig['host'] . ';charset=utf8', $dbconfig['username'], $dbconfig['password']);
-$sql->exec('SET CHARACTER SET utf8');
+$sql = new PDO('mysql:dbname=' . $dbconfig['name'] . ';host=' . $dbconfig['host'] . ';charset=utf8mb4', $dbconfig['username'], $dbconfig['password']);
+$sql->exec('SET CHARACTER SET utf8mb4');
 
 $query = $sql->prepare('SELECT * FROM messages ORDER BY date DESC LIMIT 1');
 $query->execute();
