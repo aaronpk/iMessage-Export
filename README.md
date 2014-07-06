@@ -86,7 +86,7 @@ CSV Log File
 
 Only one file is created when exporting as csv. The csv file will have the following columns:
 
-```txt
+```
 Timestamp, Date, Time, From, From Name, To, To Name, Message, Emoji, Attachments
 ```
 
