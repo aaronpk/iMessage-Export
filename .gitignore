@@ -1,3 +1,5 @@
 messages/
 .DS_Store
 contacts.txt
+last.txt
+vendor/

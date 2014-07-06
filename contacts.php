@@ -2,16 +2,16 @@
 chdir(dirname(__FILE__));
 include('include.php');
 
-if(file_exists('contacts.txt')) {
-  echo "contacts.txt file already exists! Won't overwrite.\n";
-  die();
+$data = file_get_contents('contacts.txt');
+$contacts = array();
+if(preg_match_all('/([^ \n]+) ([^\n]+)/', $data, $matches)) {
+  $contacts = $matches[1];
 }
-
-$fp = fopen('contacts.txt', 'a');
 
 $query = $db->query('SELECT * FROM handle');
 while($q = $query->fetch(PDO::FETCH_ASSOC)) {
-  fwrite($fp, $q['id']." \n");
+  if(!in_array($q['id'], $contacts)) {
+    echo $q['id'] . "\n";
+  }
 }
 
-fclose($fp);

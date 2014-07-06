@@ -43,6 +43,17 @@ function contact_name($id) {
   }
 }
 
+function query_messages_since(&$db, $timestamp) {
+  return $db->query('SELECT message.ROWID, date+978307200 AS date, 
+    message.text, is_from_me, handle.id AS contact
+  FROM message
+  LEFT JOIN handle ON message.handle_id = handle.ROWID
+  WHERE cache_roomnames IS NULL
+    AND date+978307200 > ' . $timestamp . '
+  ORDER BY date
+  ');
+}
+
 function filename_for_message($contact, $ts) {
   $folder = contact_name($contact);
   return 'messages/' . $folder . '/' . date('Y-m', $ts) . '.html';
