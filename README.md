@@ -101,3 +101,79 @@ Timestamp, Date, Time, From, From Name, To, To Name, Message, Emoji, Attachments
 
 The messages are usually in chronological order, but because of delays in when your computer actually receives the messages, they might be slightly out of order.
 
+
+SQL Database
+------------
+
+If you want to quickly query your data it may be faster to load the messages into a SQL database so you can write SQL queries.
+
+First create a table with the following SQL:
+
+```sql
+CREATE TABLE `messages` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `timestamp` int(11) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `time` time DEFAULT NULL,
+  `from` varchar(255) DEFAULT NULL,
+  `from_name` varchar(255) DEFAULT NULL,
+  `to` varchar(255) DEFAULT NULL,
+  `to_name` varchar(255) DEFAULT NULL,
+  `message` text,
+  `num_emoji` int(11) DEFAULT NULL,
+  `num_attachments` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `from,to` (`from`,`to`),
+  KEY `timestamp` (`timestamp`),
+  KEY `date` (`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
+
+To import into the database, first make sure you define the database name in `export-sql.php`, then run:
+
+```
+php export-sql.php
+```
+
+Here are some example queries you can run!
+
+
+### Who sends me the most messages in the past year?
+
+```sql
+SELECT from_name, COUNT(1) AS num
+FROM messages
+WHERE date > "2013-07-07"
+  AND date < "2014-07-07"
+GROUP BY from_name
+ORDER BY COUNT(1) DESC
+```
+
+(The top result will be you, so just ignore that)
+
+### Who do I send the most messages to?
+
+```sql
+SELECT to_name, COUNT(1) AS num
+FROM messages
+WHERE date > "2013-07-07"
+  AND date < "2014-07-07"
+GROUP BY to_name
+ORDER BY COUNT(1) DESC
+```
+
+### Most contacted people in the past year
+
+```sql
+SELECT IF(from_name="Aaron Parecki", to_name, from_name) AS name, COUNT(1) AS num
+FROM messages
+WHERE date > "2013-07-07"
+  AND date < "2014-07-07"
+GROUP BY IF(from_name="Aaron Parecki", to_name, from_name)
+ORDER BY COUNT(1) DESC;
+```
+
+Obviously you should replace my name with yours. This will count both sent and received messages.
+
+
+
