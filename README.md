@@ -217,4 +217,42 @@ GROUP BY YEAR(date), MONTH(date)
 ORDER BY date DESC
 ```
 
+### Who sent me the most emoji in the past year?
+
+```sql
+SELECT from_name, SUM(num_emoji) AS num
+FROM messages
+WHERE date > "2013-07-07"
+  AND date < "2014-07-07"
+  AND num_emoji > 0
+GROUP BY from_name
+ORDER BY SUM(num_emoji) DESC
+```
+
+### Who did I send the most emoji to in the past year?
+
+```sql
+SELECT to_name, SUM(num_emoji) AS num
+FROM messages
+WHERE date > "2013-07-07"
+  AND date < "2014-07-07"
+  AND num_emoji > 0
+GROUP BY to_name
+ORDER BY SUM(num_emoji) DESC
+```
+
+### Do you send or receive more emoji?
+
+```sql
+SELECT * FROM
+(SELECT "received" AS type, SUM(num_emoji) AS num
+FROM messages
+WHERE to_name = "Aaron Parecki") AS received
+UNION
+(SELECT "sent" AS type, SUM(num_emoji) AS num
+FROM messages
+WHERE from_name = "Aaron Parecki")
+```
+
+
 
