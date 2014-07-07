@@ -254,5 +254,14 @@ FROM messages
 WHERE from_name = "Aaron Parecki")
 ```
 
+### What hour is most active?
 
+```sql
+SELECT HOUR(DATE_ADD(time, INTERVAL 24-7 HOUR)) % 24 AS local_hour, COUNT(1) AS num
+FROM messages
+GROUP BY HOUR(time)
+ORDER BY time
+```
+
+Change the -7 to your local timezone offset. Also this ignores DST so that could use some work.
 
