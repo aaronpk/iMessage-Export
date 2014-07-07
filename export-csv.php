@@ -17,7 +17,7 @@ if(file_exists($csv_file)) {
   $last = 0;
   $fp = fopen($csv_file, 'a');
   fputcsv($fp, array(
-    'Timestamp','Date','To','To Name','From','From Name','Message','Attachments'
+    'Timestamp','Date','Time','To','To Name','From','From Name','Message','Emoji','Attachments'
   ));
 }
 
