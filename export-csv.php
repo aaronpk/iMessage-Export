@@ -2,8 +2,18 @@
 chdir(dirname(__FILE__));
 include('include.php');
 
-$csv_file = 'messages/messages.csv';
+$csv_directory = 'messages';
+$csv_file = "$csv_directory/messages.csv";
 
+if(file_exists($csv_directory) == FALSE) {
+
+	if(mkdir($csv_directory) == FALSE) {
+		exit("Could not find or create directory $csv_directory\n");
+	}
+	
+}
+
+// If the file exists already clean it up and add new messages
 if(file_exists($csv_file)) {
   $csv = file($csv_file);
   // Remove blank lines
@@ -12,10 +22,20 @@ if(file_exists($csv_file)) {
   $last = str_getcsv($csv[count($csv)-1]);
   $last = (int)$last[0];
   $fp = fopen($csv_file, 'a');
+
+  if($fp == FALSE) {
+	  exit("Could not open file $csv_file\n"); 
+  }
+  
   echo "Finding messages since ".date('Y-m-d H:i:s', $last)."\n";
 } else {
   $last = 0;
   $fp = fopen($csv_file, 'a');
+
+  if($fp == FALSE) {
+	  exit("Could not open file $csv_file\n"); 
+  }
+  
   fputcsv($fp, array(
     'Timestamp','Date','Time','To','To Name','From','From Name','Message','Emoji','Attachments'
   ));
