@@ -63,7 +63,7 @@ HTML Log Files
 Messages are stored as a minimal HTML page. Structured data is available by parsing out
 the [microformats markup](http://microformats.org/wiki/microformats2).
 
-Each message is an [h-entry](http://microformats.org/wiki/h-entry) containing the author, timestamp and text of the message.
+Each message is an [h-entry](http://microformats.org/wiki/h-entry) containing the author, timestamp and text of the message. You can parse these into a JSON structure using a [Microformats parser](http://microformats.org/wiki/microformats2#Parsers)
 
 ```html
 <div class="h-entry">
@@ -76,6 +76,59 @@ Each message is an [h-entry](http://microformats.org/wiki/h-entry) containing th
   <a href="mailto:aaron@parecki.com" class="p-author h-card">Aaron Parecki</a> 
   <span class="e-content p-name">Message text here</span>
 </div>
+```
+
+```json
+{
+  "items": [
+    {
+      "type": ["h-entry"],
+      "properties": {
+          "author": [
+              {
+                  "type": ["h-card"],
+                  "properties": {
+                      "name": ["Cool Dude"],
+                      "url": ["sms:+15035551212"]
+                  },
+                  "value": "Cool Dude"
+              }
+          ],
+          "name": ["Message text here"],
+          "published": ["2014-05-01T10:48:00+00:00"],
+          "content": [
+              {
+                  "html": "Message text here",
+                  "value": "Message text here"
+              }
+          ]
+      }
+    },
+    {
+      "type": ["h-entry"],
+      "properties": {
+          "author": [
+              {
+                  "type": ["h-card"],
+                  "properties": {
+                      "name": ["Aaron Parecki"],
+                      "url": ["mailto:aaron@parecki.com"]
+                  },
+                  "value": "Aaron Parecki"
+              }
+          ],
+          "name": ["Message text here"],
+          "published": ["2014-05-01T10:49:00+00:00"],
+          "content": [
+              {
+                  "html": "Message text here",
+                  "value": "Message text here"
+              }
+          ]
+      }
+    }
+  ]
+}
 ```
 
 Photos in the message thread are also included in the export and are stored in a subfolder with the same name as the file. They are embedded in the HTML with an img tag so they will be rendered by browsers.

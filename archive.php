@@ -2,8 +2,9 @@
 chdir(dirname(__FILE__));
 include('include.php');
 
-if(file_exists('last.txt')) {
-  $last = file_get_contents('last.txt');
+$last_fn = dirname(__FILE__).'/last.txt';
+if(file_exists($last_fn)) {
+  $last = file_get_contents($last_fn);
 } else {
   $last = 0;
 }
@@ -12,6 +13,7 @@ $query = query_messages_since($db, $last);
 $last_timestamp = 0;
 while($line = $query->fetch(PDO::FETCH_ASSOC)) {
   $fn = filename_for_message($line['contact'], $line['date']);
+  echo $fn."\n";
   if(!file_exists(dirname($fn))) {
     mkdir(dirname($fn));
   }
@@ -47,5 +49,6 @@ while($line = $query->fetch(PDO::FETCH_ASSOC)) {
   }
 }
 
-file_put_contents('last.txt', $last_timestamp);
+if($last_timestamp > 0)
+  file_put_contents($last_fn, $last_timestamp);
 
