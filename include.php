@@ -44,12 +44,12 @@ function contact_name($id) {
 }
 
 function query_messages_since(&$db, $timestamp) {
-  return $db->query('SELECT message.ROWID, date+978307200 AS date, 
+  return $db->query('SELECT message.ROWID, substr(date,1,9)+978307200 AS date, 
     message.text, is_from_me, handle.id AS contact
   FROM message
   LEFT JOIN handle ON message.handle_id = handle.ROWID
   WHERE cache_roomnames IS NULL
-    AND date+978307200 > ' . $timestamp . '
+    AND substr(date,1,9)+978307200 > ' . $timestamp . '
   ORDER BY date
   ');
 }
