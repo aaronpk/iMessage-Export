@@ -3,3 +3,4 @@ messages/*
 contacts.txt
 last.txt
 vendor/
+config-db.php
