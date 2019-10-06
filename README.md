@@ -182,7 +182,7 @@ CREATE TABLE `messages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
-To import into the database, first make sure you define the database name in `export-sql.php`, then run:
+To import into the database, first make sure you copy `config-db.sample.php` to `config-db.php` and define your own database credentials. Then run:
 
 ```
 php export-sql.php
